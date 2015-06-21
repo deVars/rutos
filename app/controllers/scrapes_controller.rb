@@ -27,7 +27,7 @@ class ScrapesController < ApplicationController
 		list = list.where("resolution = ?", params[:resolution]) unless params[:resolution] == nil
 		
 		list.each do |entry| 
-			entry.title = entry.title.gsub(/\[.*?\]/, "").gsub(/\_/, " ")
+			entry.title = entry.title.gsub(/\[.*?\]/, "").gsub(/\_/, " ") unless entry.title == nil
 		end	
 
 		@json = list
