@@ -15,9 +15,6 @@
 /log/*.log
 /tmp
 
-# ignore migrate configs
-**/db/migrate/*
-
 # ignore bundle gems
 **/vendor/bundle
 
