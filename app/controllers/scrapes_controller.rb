@@ -34,7 +34,7 @@ class ScrapesController < ApplicationController
 	end
 
 	def get_subbers
-		@json = Scrape.select(:subber).distinct
+		@json = Scrape.select(:subber).distinct.order(subber: :asc)
 	end
 
 	def get_link
