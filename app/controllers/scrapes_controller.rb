@@ -3,19 +3,21 @@ class ScrapesController < ApplicationController
 
 	end
 
-	def index
-		@arr = Array.new
+	def server_download
+		@json = {success: false}
+		list = Scrape.select(:id, :title, :url).find(params[:id])
+		return @json if list.nil? || session[:user_id] == nil
 
-		@dog = Hash.new
-		@dog['message'] = 'Success'
+		response = Faraday.get list.url
+		download_path = ENV['RUTOS_DOWNLOAD_PATH']
+		download_path = './' if download_path.nil?
 
-		@cat = Hash.new
-		@cat['meow'] = 'meow~'
+		list.was_downloaded = true
+		list.save
 
-		@arr.push(@dog)
-		@arr.push(@cat)
+		File.open(download_path + list.title + '.torrent', 'wb') {|fp| fp.write(response.body)}
 
-		@json = @arr
+		@json = {success: true}
 	end
 
 	def get
