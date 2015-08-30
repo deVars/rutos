@@ -20,10 +20,16 @@ class ScrapesController < ApplicationController
 		@json = {success: true}
 	end
 
-	def get
+	def get_default_list
 		list = Scrape.select(:id, :subber, :title, :resolution, :bit_encoding, :was_downloaded)
 			.order(publish_date: :desc)
 			.limit(50)
+
+		list
+	end
+
+	def get
+		list = get_default_list
 		list = list.where("title LIKE ?", "%#{params[:title]}%") unless params[:title] == nil
 		list = list.where("subber = ?", params[:subber]) unless params[:subber] == nil
 		list = list.where("resolution = ?", params[:resolution]) unless params[:resolution] == nil
@@ -31,6 +37,26 @@ class ScrapesController < ApplicationController
 		list.each do |entry| 
 			entry.title = entry.title.gsub(/\[.*?\]/, "").gsub(/\_/, " ") unless entry.title == nil
 		end	
+
+		@json = list
+	end
+
+	def get_fav
+		list = get_default_list
+		where_clauses = [];
+		# where_template = "(title LIKE ? AND subber LIKE ? AND resolution = ?) OR "
+
+		Criterion.all.each do |crit|
+			title = "title LIKE '%#{crit[:title]}%'"
+			subber = "subber LIKE '%#{crit[:subber]}%'"
+			resolution = "resolution = #{crit[:resolution]}"
+			
+			statement = [title, subber, resolution]
+			where_template = "(#{statement.join(' AND ')})"
+			where_clauses << where_template
+		end
+
+		list = list.where(where_clauses.join(' OR '))
 
 		@json = list
 	end

@@ -12,8 +12,11 @@ Rails.application.routes.draw do
   #get base_url + 'scrapes/test'              => 'scrapes#test'
   get base_url + 'scrapes/get/link/:id'       => 'scrapes#get_link'
   get base_url + 'scrapes/get/subbers'        => 'scrapes#get_subbers'
+  get base_url + 'scrapes/get/fav'            => 'scrapes#get_fav'
   get base_url + 'scrapes/get/:subber'        => 'scrapes#get'
   get base_url + 'scrapes/get'                => 'scrapes#get'
+  get base_url + 'favs/get'                   => 'favs#get'
+
 
 
   # Example of regular route:
