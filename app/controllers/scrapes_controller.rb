@@ -46,7 +46,7 @@ class ScrapesController < ApplicationController
 		where_clauses = [];
 		# where_template = "(title LIKE ? AND subber LIKE ? AND resolution = ?) OR "
 
-		Criterion.all.each do |crit|
+		Fav.all.each do |crit|
 			title = "title LIKE '%#{crit[:title]}%'"
 			subber = "subber LIKE '%#{crit[:subber]}%'"
 			resolution = "resolution = #{crit[:resolution]}"
