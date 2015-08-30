@@ -11,7 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150614064242) do
+ActiveRecord::Schema.define(version: 20150830015621) do
+
+  create_table "favs", force: true do |t|
+    t.string   "title"
+    t.string   "subber"
+    t.integer  "resolution"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "favs", ["user_id"], name: "index_favs_on_user_id"
 
   create_table "scrapes", force: true do |t|
     t.string   "subber"
