@@ -1,4 +1,5 @@
 class Scrape < ActiveRecord::Base
+	validates :subber, :title, :resolution, :bit_encoding, :url, presence: true
 
 	def self.gather
 		feed = Feedjira::Feed.fetch_and_parse 'http://www.nyaa.se/?page=rss&cats=1_37&filter=2'
