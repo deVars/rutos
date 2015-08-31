@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   base_url = 'scrapeserv/'
   post base_url + 'scrapes/request/dl/:id'    => 'scrapes#server_download'
   post base_url + 'users/login'               => 'users#signin'
+  post base_url + 'favs/set'                  => 'favs#set'
 
   get base_url + 'scrapes/rawtest'            => 'scrapes#raw'
   #get base_url + 'scrapes/test'              => 'scrapes#test'
@@ -16,7 +17,8 @@ Rails.application.routes.draw do
   get base_url + 'scrapes/get/:subber'        => 'scrapes#get'
   get base_url + 'scrapes/get'                => 'scrapes#get'
   get base_url + 'favs/get'                   => 'favs#get'
-
+  
+  match '*path', to: 'scrapes#get', via: :all
 
 
   # Example of regular route:
