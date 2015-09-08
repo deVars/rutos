@@ -5,7 +5,7 @@ class ScrapesController < ApplicationController
 
 	def server_download
 		@json = {success: false}
-		list = Scrape.select(:id, :title, :url).find(params[:id])
+		list = Scrape.find(params[:id])
 		return @json if list.nil? || session[:user_id] == nil
 
 		response = Faraday.get list.url
