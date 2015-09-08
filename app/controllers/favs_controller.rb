@@ -1,7 +1,8 @@
 class FavsController < ApplicationController
 	def get
 		if session[:user].nil?
-			@json = [] 
+			@json = []
+			exit
 		end
 
 		current_user = User.find(session[:user_id])
