@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   post base_url + 'scrapes/request/dl/:id'    => 'scrapes#server_download'
   post base_url + 'users/login'               => 'users#signin'
   post base_url + 'favs/set'                  => 'favs#set'
+  post base_url + 'favs/add'                  => 'favs#add'
+  post base_url + 'favs/remove'               => 'favs#remove'
 
   get base_url + 'scrapes/rawtest'            => 'scrapes#raw'
   #get base_url + 'scrapes/test'              => 'scrapes#test'
