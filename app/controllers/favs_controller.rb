@@ -22,17 +22,22 @@ class FavsController < ApplicationController
 
 		begin
 			do_session_check
-			do_fav_data_check
 		rescue StandardError => error
 			logger.error error.message
 			return @json
 		end
 
-		return @json unless params[:fav_data].respond_to? :to_s
-		
-		fav = params[:favdata]
-		fav = JSON.parse params[:favdata] if params[:favdata].is_a? String
-		return @json if fav['title'] == nil
+		return @json unless params[:title].respond_to? :to_s
+
+    fav = {
+      title: params[:title].to_s,
+      subber: params[:subber].to_s,
+      resolution: params[:resolution].to_i
+    }
+
+    logger.debug("fav: #{fav}, fav['title'] is nil? #{fav[:title] == nil}")
+
+    return @json if fav[:title] == nil
 
 		add_favorite fav
 		@json = SUCCESS_TRUE
@@ -42,17 +47,17 @@ class FavsController < ApplicationController
 		current_user = User.find session[:user_id]
 
 		effective_subber = '*'
-		effective_subber = fav_data['subber'] unless fav_data['subber'].nil?
+		effective_subber = fav_data[:subber] unless fav_data[:subber].nil?
 
 		effective_resolution = 720
-		effective_resolution = fav_data['resolution'] unless fav_data['resolution'].nil?
+		effective_resolution = fav_data[:resolution] unless fav_data[:resolution].nil?
 
-		return if current_user.favs.exists?(title: fav_data['title'], 
-			subber: effective_subber, 
+		return if current_user.favs.exists?(title: fav_data[:title],
+			subber: effective_subber,
 			resolution: effective_resolution)
-		
+
 		current_user.favs
-			.create(:title => fav_data['title'], \
+			.create(:title => fav_data[:title], \
 				:subber => effective_subber, \
 				:resolution => effective_resolution)
 	end
@@ -69,8 +74,8 @@ class FavsController < ApplicationController
 
 		fav = params[:favdata]
 		fav = JSON.parse params[:favdata] if params[:favdata].is_a? String
-		return @json unless fav['id'] != nil && 
-			fav['id'].respond_to?(:to_i) && 
+		return @json unless fav['id'] != nil &&
+			fav['id'].respond_to?(:to_i) &&
 			fav['id'].to_i != 0
 
 		logger.debug fav['id']
@@ -112,6 +117,7 @@ class FavsController < ApplicationController
 
 	def do_session_check
 		if session[:user_id].nil?
+      logger.debug("no session")
 			raise 'no session running'
 		end
 	end
