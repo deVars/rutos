@@ -50,7 +50,7 @@ class FavsController < ApplicationController
 		effective_subber = fav_data[:subber] unless fav_data[:subber].nil?
 
 		effective_resolution = 720
-		effective_resolution = fav_data[:resolution] unless fav_data[:resolution].nil?
+		effective_resolution = fav_data[:resolution] unless fav_data[:resolution] == 0
 
 		return if current_user.favs.exists?(title: fav_data[:title],
 			subber: effective_subber,
